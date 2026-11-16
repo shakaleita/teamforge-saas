@@ -191,3 +191,8 @@ def activity(workspace: str | None = None, limit: int = _Query(25, ge=1, le=100)
             data = con.execute('SELECT * FROM task_activity WHERE workspace=? ORDER BY id DESC LIMIT ?', (workspace,limit))
         return [dict(r) for r in data]
 
+
+
+# v0.5: authenticated owner session for demo deployment
+from security import install_auth
+install_auth(app,DB)

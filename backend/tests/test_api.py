@@ -10,11 +10,14 @@ from fastapi.testclient import TestClient
 @pytest.fixture()
 def client(tmp_path, monkeypatch):
     monkeypatch.setenv("APP_DB", str(tmp_path / "test.db"))
+    monkeypatch.setenv("OWNER_SETUP_TOKEN", "test-only-setup-token-1234567890123")
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
     if "main" in sys.modules:
         del sys.modules["main"]
     module = importlib.import_module("main")
     with TestClient(module.app) as c:
+        assert c.post('/api/auth/register',json={'username':'qaowner','password':'DemoPassword123!','setup_token':'test-only-setup-token-1234567890123'}).status_code == 201
+        assert c.post('/api/auth/login',json={'username':'qaowner','password':'DemoPassword123!'}).status_code == 200
         yield c
 
 
@@ -77,3 +80,11 @@ def test_task_activity_trail(client):
     assert [e['action'] for e in events[:4]]==['deleted','edited','status_changed','created']
     assert client.get('/api/activity',params={'limit':0}).status_code==422
 
+
+
+def test_v05_secure_bootstrap(client):
+    from fastapi.testclient import TestClient
+    with TestClient(client.app) as anonymous:
+        assert anonymous.get('/api/items').status_code==401
+        assert anonymous.post('/api/auth/register',json={'username':'intruder','password':'BadPassword123!','setup_token':'wrong'}).status_code==403
+    assert client.get('/api/auth/me').status_code==200
