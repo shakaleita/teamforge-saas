@@ -21,6 +21,13 @@ def initialize(path: Path):
         con.execute("CREATE TABLE IF NOT EXISTS app_users (id INTEGER PRIMARY KEY, username TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, created_at INTEGER NOT NULL)")
         con.execute("CREATE TABLE IF NOT EXISTS app_sessions (token_hash TEXT PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES app_users(id) ON DELETE CASCADE, expires_at INTEGER NOT NULL)")
         con.execute("CREATE INDEX IF NOT EXISTS idx_app_session_expiry ON app_sessions(expires_at)")
+        con.execute("""CREATE TABLE IF NOT EXISTS app_audit (
+            id INTEGER PRIMARY KEY,
+            user_id INTEGER NOT NULL REFERENCES app_users(id) ON DELETE CASCADE,
+            method TEXT NOT NULL, path TEXT NOT NULL,
+            status_code INTEGER NOT NULL, recorded_at INTEGER NOT NULL
+        )""")
+        con.execute("CREATE INDEX IF NOT EXISTS idx_app_audit_owner ON app_audit(user_id,id)")
         con.commit()
 
 def digest(password: str, salt: bytes | None = None):
@@ -59,8 +66,11 @@ def install_auth(app:FastAPI, path:Path):
         route=request.url.path
         if route.startswith("/api/"):
             origin=request.headers.get("origin")
-            if request.method not in ("GET","HEAD","OPTIONS") and origin and origin not in origins:
-                return JSONResponse({"detail":"Origin not allowed"},status_code=403)
+            if request.method not in ("GET","HEAD","OPTIONS"):
+                if request.headers.get("sec-fetch-site")=="cross-site":
+                    return JSONResponse({"detail":"Cross-site API request blocked"},status_code=403)
+                if origin and origin not in origins:
+                    return JSONResponse({"detail":"Origin not allowed"},status_code=403)
             if request.method!="OPTIONS" and route not in allowed:
                 user=session_user(path,request.cookies.get(COOKIE_NAME))
                 if not user:return JSONResponse({"detail":"Authentication required"},status_code=401)
@@ -70,6 +80,16 @@ def install_auth(app:FastAPI, path:Path):
             response.headers["Cache-Control"]="no-store"
             response.headers["X-Content-Type-Options"]="nosniff"
             response.headers["Referrer-Policy"]="no-referrer"
+            response.headers["X-Frame-Options"]="DENY"
+            if os.getenv("COOKIE_SECURE","0")=="1":
+                response.headers["Strict-Transport-Security"]="max-age=31536000"
+            if (request.method not in ("GET","HEAD","OPTIONS")
+                    and not route.startswith("/api/auth/")
+                    and hasattr(request.state,"user")):
+                with connect(path) as con:
+                    con.execute("INSERT INTO app_audit(user_id,method,path,status_code,recorded_at) VALUES(?,?,?,?,?)",
+                        (request.state.user["id"],request.method,route[:255],response.status_code,int(time.time())))
+                    con.commit()
         return response
 
     @app.get("/api/auth/setup")
@@ -114,6 +134,16 @@ def install_auth(app:FastAPI, path:Path):
     @app.get("/api/auth/me")
     def current_user(request:Request):
         return request.state.user
+
+    @app.get("/api/auth/audit")
+    def audit_log(request:Request,limit:int=50):
+        """Owner-visible mutation audit; no passwords, tokens, or request bodies."""
+        if limit<1 or limit>200:
+            raise HTTPException(422,"Limit must be between 1 and 200")
+        with connect(path) as con:
+            rows=con.execute("SELECT id,method,path,status_code,recorded_at FROM app_audit WHERE user_id=? ORDER BY id DESC LIMIT ?",
+                (request.state.user["id"],limit)).fetchall()
+            return [dict(row) for row in rows]
 
     @app.post("/api/auth/logout")
     def logout(request:Request,response:Response):
