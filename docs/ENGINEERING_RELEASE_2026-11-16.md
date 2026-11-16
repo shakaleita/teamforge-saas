@@ -1,6 +1,6 @@
 # Digital Solution9 — Engineering Improvement Release
 
-**Scope:** 21 public repositories owned by [@shakaleita](https://github.com/shakaleita). **Excluded without access or changes:** `apex-clinic-os`, `PrimeEcho`, and `PrimeEcho_Ready`.
+**Scope:** 21 public repositories owned by [@shakaleita](https://github.com/shakaleita). **Excluded:** all private repositories; their names are intentionally omitted from this public report.
 
 This is a **verified record of code and test changes**, not a claim of commercial-grade security or a numerical 9/10 score. Most apps remain portfolio-quality MVPs. GitHub Actions cover unit/integration tests, builds, or lint depending on the repository; they do not prove complete accessibility, penetration-test, scalability, uptime or deployment readiness.
 
