@@ -56,6 +56,10 @@ class Credentials(BaseModel):
 class BootstrapCredentials(Credentials):
     setup_token:str=Field(default="",max_length=512)
 
+class PasswordChange(BaseModel):
+    current_password:str=Field(min_length=1,max_length=128)
+    new_password:str=Field(min_length=12,max_length=128)
+
 def install_auth(app:FastAPI, path:Path):
     initialize(path)
     origins={x.strip() for x in os.getenv("CORS_ORIGINS","http://localhost:5173").split(",") if x.strip()}
@@ -130,6 +134,25 @@ def install_auth(app:FastAPI, path:Path):
             con.commit()
         response.set_cookie(COOKIE_NAME,token,max_age=SESSION_TTL,httponly=True,secure=os.getenv("COOKIE_SECURE","0")=="1",samesite="strict",path="/")
         return {"id":user["id"],"username":user["username"]}
+
+    @app.post("/api/auth/change-password")
+    def change_password(data:PasswordChange,request:Request,response:Response):
+        """Rotate the owner password, invalidating *all* active sessions."""
+        if hmac.compare_digest(data.current_password,data.new_password):
+            raise HTTPException(422,"Choose a different new password")
+        with connect(path) as con:
+            con.execute("BEGIN IMMEDIATE")
+            user=con.execute("SELECT password_hash FROM app_users WHERE id=?",
+                             (request.state.user["id"],)).fetchone()
+            if user is None or not verify(data.current_password,user["password_hash"]):
+                raise HTTPException(403,"Current password is incorrect")
+            con.execute("UPDATE app_users SET password_hash=? WHERE id=?",
+                        (digest(data.new_password),request.state.user["id"]))
+            con.execute("DELETE FROM app_sessions WHERE user_id=?",
+                        (request.state.user["id"],))
+        response.delete_cookie(COOKIE_NAME,path="/")
+        response.headers["Cache-Control"]="no-store"
+        return {"password_changed":True,"sessions_revoked":True}
 
     @app.get("/api/auth/me")
     def current_user(request:Request):
