@@ -112,3 +112,17 @@ def test_authenticated_mutation_audit_and_cross_site_guard(client):
     blocked=client.post("/api/items",json={"title":"Blocked request","workspace":"Audit QA"},
                         headers={"sec-fetch-site":"cross-site"})
     assert blocked.status_code==403
+
+def test_workspace_insights_track_completion_and_overdue(client):
+    create(client, 'Overdue work', 'Metrics Studio', due_date='2020-01-01', status='In Progress', priority='High')
+    create(client, 'Completed work', 'Metrics Studio', due_date='2020-01-01', status='Done', priority='Urgent')
+    create(client, 'Other workspace', 'Other Studio', due_date='2020-01-01')
+    stats = client.get('/api/insights', params={'workspace':'Metrics Studio'})
+    assert stats.status_code == 200
+    data=stats.json()
+    assert data['total_tasks']==2
+    assert data['completed_tasks']==1
+    assert data['overdue_tasks']==1
+    assert data['completion_percent']==50.0
+    assert sum(x['tasks'] for x in data['by_priority'])==2
+    assert client.get('/api/insights',params={'workspace':'missing'}).json()['completion_percent']==0
