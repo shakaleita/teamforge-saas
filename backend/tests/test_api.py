@@ -126,3 +126,21 @@ def test_workspace_insights_track_completion_and_overdue(client):
     assert data['completion_percent']==50.0
     assert sum(x['tasks'] for x in data['by_priority'])==2
     assert client.get('/api/insights',params={'workspace':'missing'}).json()['completion_percent']==0
+
+
+
+def test_due_date_must_be_canonical_and_real(client):
+    assert create(client, title='Valid date',due_date='2032-02-29').status_code==201
+    for value in ('2031-02-29','2030-02-30','2030-1-1','2030-01-01T00:00','not-a-date'):
+        assert create(client,title='Invalid date',due_date=value).status_code==422
+    item=create(client,title='Edit date',due_date='').json()
+    assert client.put(f"/api/items/{item['id']}",json={'due_date':'2030-02-30'}).status_code==422
+    assert client.put(f"/api/items/{item['id']}",json={'due_date':'2030-12-01'}).status_code==200
+
+
+def test_repeated_status_transition_is_idempotent_in_activity(client):
+    item=create(client,title='No-op status',workspace='Idempotency QA').json()
+    assert client.patch(f"/api/items/{item['id']}",params={'status':'Review'}).status_code==200
+    assert client.patch(f"/api/items/{item['id']}",params={'status':'Review'}).status_code==200
+    activity=client.get('/api/activity',params={'workspace':'Idempotency QA'}).json()
+    assert [a['action'] for a in activity].count('status_changed')==1
