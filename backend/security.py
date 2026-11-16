@@ -9,6 +9,11 @@ from pydantic import BaseModel, Field
 COOKIE_NAME = "portfolio_session"
 SESSION_TTL = 12 * 60 * 60
 
+def secure_cookie_required() -> bool:
+    # Never permit an insecure session cookie in a production deployment.
+    # Local HTTP demos remain usable with APP_ENV unset or development.
+    return os.getenv("APP_ENV","").lower()=="production" or os.getenv("COOKIE_SECURE","0")=="1"
+
 def connect(path: Path):
     con=sqlite3.connect(path, timeout=10)
     con.row_factory=sqlite3.Row
@@ -85,7 +90,7 @@ def install_auth(app:FastAPI, path:Path):
             response.headers["X-Content-Type-Options"]="nosniff"
             response.headers["Referrer-Policy"]="no-referrer"
             response.headers["X-Frame-Options"]="DENY"
-            if os.getenv("COOKIE_SECURE","0")=="1":
+            if secure_cookie_required():
                 response.headers["Strict-Transport-Security"]="max-age=31536000"
             if (request.method not in ("GET","HEAD","OPTIONS")
                     and not route.startswith("/api/auth/")
@@ -132,7 +137,7 @@ def install_auth(app:FastAPI, path:Path):
             con.execute("DELETE FROM app_sessions WHERE expires_at<=?",(int(now),))
             con.execute("INSERT INTO app_sessions(token_hash,user_id,expires_at) VALUES(?,?,?)",(hashlib.sha256(token.encode()).hexdigest(),user["id"],int(now)+SESSION_TTL))
             con.commit()
-        response.set_cookie(COOKIE_NAME,token,max_age=SESSION_TTL,httponly=True,secure=os.getenv("COOKIE_SECURE","0")=="1",samesite="strict",path="/")
+        response.set_cookie(COOKIE_NAME,token,max_age=SESSION_TTL,httponly=True,secure=secure_cookie_required(),samesite="strict",path="/")
         return {"id":user["id"],"username":user["username"]}
 
     @app.post("/api/auth/change-password")
