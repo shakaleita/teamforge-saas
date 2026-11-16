@@ -8,7 +8,7 @@ const meta = {"id": 1, "title": "TeamForge", "description": "Multi-workspace pro
 const fields = [["workspace", "Workspace", "text", "Acme Studio"], ["title", "Task title", "text", "Build dashboard"], ["assignee", "Assignee", "text", "Alex"], ["priority", "Priority", "select", "Medium|Low|Medium|High|Urgent"], ["status", "Status", "select", "Backlog|Backlog|In Progress|Review|Done"], ["due_date", "Due date", "date", ""]];
 const defaults = Object.fromEntries(fields.map(([key,,type,initial])=>[key,type==='select'?initial.split('|')[1]:initial]));
 const request = async(path,options={})=>{
- const r=await fetch(API+path,{...options,headers:{'Content-Type':'application/json',...(options.headers||{})}});
+ const r=await fetch(API+path,{...options,credentials:'include',headers:{'Content-Type':'application/json',...(options.headers||{})}});
  if(r.status===204)return null;
  let data=await r.json().catch(()=>({detail:'Unexpected server response'}));
  if(!r.ok)throw new Error(typeof data.detail==='string'?data.detail:JSON.stringify(data.detail||data));
@@ -44,7 +44,7 @@ function App(){
   if(meta.id===10){await mutate('/api/items/'+item.id,{method:'PATCH'});}
  };
  async function searchDocs(e){e.preventDefault();try{setExtra(await request('/api/search?q='+encodeURIComponent(search)))}catch(e){setNotice(e.message)}}
- async function importCSV(e){const file=e.target.files?.[0];if(!file)return;setBusy(true);try{const data=new FormData();data.append('file',file);const r=await fetch(API+'/api/import',{method:'POST',body:data});const result=await r.json();if(!r.ok)throw Error(result.detail||'Upload failed');setNotice(`Imported ${result.imported} records`);await refresh()}catch(e){setNotice(e.message)}finally{setBusy(false);e.target.value=''}}
+ async function importCSV(e){const file=e.target.files?.[0];if(!file)return;setBusy(true);try{const data=new FormData();data.append('file',file);const r=await fetch(API+'/api/import',{method:'POST',body:data,credentials:'include'});const result=await r.json();if(!r.ok)throw Error(result.detail||'Upload failed');setNotice(`Imported ${result.imported} records`);await refresh()}catch(e){setNotice(e.message)}finally{setBusy(false);e.target.value=''}}
  async function updatePage(){if(!selected)return;await mutate('/api/items/'+selected.id,{method:'PUT',body:JSON.stringify(selected)});setSelected(null)}
  const actionLabel={1:'Move status',2:'Checkout',3:'Cancel',4:'Change stage',6:'Enrol student',9:'Run check',10:'Toggle publish'}[meta.id];
  const displayFields=fields.map(x=>x[0]).filter(k=>!(k==='body'&&meta.id===5));
