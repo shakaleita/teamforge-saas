@@ -30,7 +30,7 @@ Every project includes a `frontend/` React application, a `backend/` FastAPI app
 - **Honest scope:** descriptions separate completed MVP features from planned production improvements.
 - **Evidence:** read the tests and API code as well as screenshots or demos when available.
 - **Privacy:** synthetic demonstration data only; never submit real patient or client data.
-- **Security:** do **not** expose the existing unauthenticated v0.3 APIs as public production services; authentication, authorization, review, and deployment hardening are needed.
+- **Security:** owner-only demo authentication is present, but the apps still require threat modelling, deployment hardening and independent security review before use with real data.
 - **Reproducibility:** make setup clear, avoid committing credentials, and check CI results.
 
 ## Next steps toward production quality
@@ -67,8 +67,14 @@ The following public repositories extend the initial ten-app collection. They ar
 | [HelpBot Widget](https://github.com/shakaleita/helpbot-widget) | Flask-backed embeddable FAQ widget |
 | [ShopAdmin](https://github.com/shakaleita/shopadmin) | Laravel commerce catalogue and fulfilment |
 | [Beautyfort API](https://github.com/shakaleita/Beautyfort-API) | **Legacy/reference** SOAP/WordPress source with upstream authorship to preserve; see [provenance notes](https://github.com/shakaleita/Beautyfort-API/blob/master/PORTFOLIO_AUDIT.md) |
-| [Apex Clinic OS](https://github.com/shakaleita/apex-clinic-os) | **Empty repository / in development** — not presented as a working product |
 
-The independent [Elementor portfolio page template](https://github.com/shakaleita) can display all 22 public repositories without altering the existing WordPress theme or logo. The downloadable Elementor JSON template is supplied separately in the project conversation.
+The independent [Elementor portfolio page template](https://github.com/shakaleita) can display all 21 public repositories without altering the existing WordPress theme or logo. The downloadable Elementor JSON template is supplied separately in the project conversation.
 
 **Review policy:** Project descriptions are grounded in public source/README files. Legacy code is not attributed as original work without evidence; private repositories are excluded. No 9/10 or enterprise-production rating is inferred from repository count, theme design or CI badges.
+
+
+## November 2026 engineering upgrade
+
+The public projects now include improvements to owner account security, revocable sessions, credentialed frontend API access, domain validation, regression testing and static security analysis. The React/FastAPI collection includes a password-change UI with revocation of existing sessions. GitHub Actions now runs CI checks, and the non-PHP application repositories use CodeQL; PHP applications use additional syntax and dependency audits. These checks are not a substitute for real deployment and security testing.
+
+[Read the latest engineering upgrade report](docs/ENGINEERING_UPGRADE_2026-11.md) for verified changes, outstanding risks and release criteria. Dependency-update PRs are intentionally **review-only**, never automatically merged.
