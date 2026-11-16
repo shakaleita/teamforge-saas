@@ -1,80 +1,67 @@
-# Full-Stack Engineering Portfolio
+# Digital Solution9 · Full-Stack Engineering Portfolio
 
-> 10 independent, public portfolio applications | React · Python · FastAPI · SQLite
+**Portfolio by [@shakaleita](https://github.com/shakaleita)** · React · JavaScript · Node.js · Python · FastAPI · PHP · Laravel · SQL · WordPress
 
-**By [shakaleita](https://github.com/shakaleita)**
+A curated public portfolio of **20 active web application repositories** across commerce, operations, analytics, content and collaboration. Projects are locally runnable engineering MVPs with real application workflows, tests and code review paths. They are **not represented as enterprise production services or live customer systems**.
 
-These are hands-on **portfolio MVPs**, not production SaaS products. Each project is a distinct problem domain, intended to demonstrate end-to-end implementation, engineering trade-offs, and reproducible tests. **The public repositories now include the v0.5 engineering upgrades:** operator-controlled owner setup, protected HTTP APIs, enhanced domain workflows, and CI tests. They remain owner-only local MVPs—not audited production applications.
+**For recruiters and hiring managers:** Start with the five selected projects below, or use the [copy-ready CV highlights](docs/CV_READY.md). Review the [engineering release notes](docs/ENGINEERING_RELEASE_2026-11-16.md) for implementation evidence and remaining limitations.
 
-## Explore the 10 projects
+## Featured engineering work
 
-| Project | What it does | Engineering focus |
+| Project | What it demonstrates | Notable implemented details |
 |---|---|---|
-| [TeamForge](https://github.com/shakaleita/teamforge-saas) | Workspaces, tasks, activity history, and project reporting | Project/task data modeling, audit trails, API design |
-| [Mercato](https://github.com/shakaleita/Mercato-E-Commerce-Platform) | Product inventory, order history, stock restocking, and checkout workflows | Inventory consistency, order lifecycle, transaction handling |
-| [ClinicFlow](https://github.com/shakaleita/ClinicFlow-Medical-Booking-System) | Doctor schedules, booking conflict checks, and appointment rescheduling | Scheduling constraints, validation, time-based business rules |
-| [Pipeline](https://github.com/shakaleita/Pipeline-Sales-CRM) | Deal tracking, stage history, sales reports, and forecasting | Business workflows, history tracking, aggregate reporting |
-| [KnowBase](https://github.com/shakaleita/KnowBase-Document-Search) | Document CRUD and full-text searching | Search indexing, content retrieval, API design |
-| [CourseCraft](https://github.com/shakaleita/CourseCraft-Learning) | Course enrollment, completion tracking, and reporting | Education domain modeling, progress calculations |
-| [PulseChat](https://github.com/shakaleita/PulseChat-Real-Time-Messaging) | Chat rooms, message history, search, and real-time messaging | Event delivery, persistence, WebSocket communication |
-| [InsightLab](https://github.com/shakaleita/InsightLab-Business-Analytics) | CSV import, analytics filtering, and exports | Data ingestion, aggregations, reporting |
-| [UptimePilot](https://github.com/shakaleita/UptimePilot-API-Monitoring) | HTTP monitoring history, uptime percentages, and latency metrics | Observability, networking safety, performance metrics |
-| [PageCraft](https://github.com/shakaleita/PageCraft-Headless-CMS) | Drafts, publishing, revision history, and sitemap generation | Content versioning, publishing lifecycle, structured content |
+| [Mercato](https://github.com/shakaleita/Mercato-E-Commerce-Platform) | State consistency | Integer-cent arithmetic, checkout idempotency and cancellation/stock recovery |
+| [UptimePilot](https://github.com/shakaleita/UptimePilot-API-Monitoring) | Security-oriented networking | Allowlisted monitors, public-IP validation, pinned-address outbound probes and no redirect following |
+| [Laravel Inventory](https://github.com/shakaleita/laravel-inventory) | Transactional data integrity | Stock adjustment rollback, movement ledger and reconciliation reporting |
+| [NexaCRM](https://github.com/shakaleita/nexacrm) | Business logic | Deal lifecycle, transparent probability-weighted forecasts and integer-cent accounting |
+| [TeamForge](https://github.com/shakaleita/teamforge-saas) | Full-stack collaboration | Task lifecycle, workspace filtering, audit history and secure single-owner demo access |
 
-## Reproduce the demos
+## Complete public application collection (20)
 
-Every project includes a `frontend/` React application, a `backend/` FastAPI application, an independent `README.md`, and local-data setup instructions. Follow each project's README; no paid service is required for the local MVP. GitHub Actions runs the existing backend tests and attempts a frontend production build on pushes and pull requests. A green badge indicates the most recent successful CI run, **not** a security certification or a live deployment.
+| Application | Technology | Problem solved |
+|---|---|---|
+| [TeamForge](https://github.com/shakaleita/teamforge-saas) | React · FastAPI · SQLite | Workspace task planning, task discussions, activity audit, dates and Kanban reporting |
+| [Mercato](https://github.com/shakaleita/Mercato-E-Commerce-Platform) | React · FastAPI · SQLite | Inventory, checkout, cancellation and cent-accurate idempotent orders |
+| [ClinicFlow](https://github.com/shakaleita/ClinicFlow-Medical-Booking-System) | React · FastAPI · SQLite | Appointment booking, rescheduling and canonical time-slot collision prevention |
+| [Pipeline CRM](https://github.com/shakaleita/Pipeline-Sales-CRM) | React · FastAPI · SQLite | Deal stage changes, persistent notes and probability reporting |
+| [KnowBase](https://github.com/shakaleita/KnowBase-Document-Search) | React · FastAPI · SQLite FTS5 | Full-text document search with revisions and restoration |
+| [CourseCraft](https://github.com/shakaleita/CourseCraft-Learning) | React · FastAPI · SQLite | Course enrolment, progress tracking and retry-safe lesson completion |
+| [PulseChat](https://github.com/shakaleita/PulseChat-Real-Time-Messaging) | React · FastAPI · WebSockets | Chat rooms, persistent message history and input/access checks |
+| [InsightLab](https://github.com/shakaleita/InsightLab-Business-Analytics) | React · FastAPI · SQLite | CSV data import, monthly insights and atomic dataset validation |
+| [UptimePilot](https://github.com/shakaleita/UptimePilot-API-Monitoring) | React · FastAPI · networking | HTTP status checks, reliability analytics and pinned-public-IP safeguards |
+| [PageCraft](https://github.com/shakaleita/PageCraft-Headless-CMS) | React · FastAPI · SQLite | Headless publishing, page revisions and optimistic edit consistency |
+| [NexaCRM](https://github.com/shakaleita/nexacrm) | JavaScript · Node.js · Express | Company/contact/deal workflows and weighted sales forecasting |
+| [BizFlow ERP](https://github.com/shakaleita/bizflow-erp) | Python · Flask · SQLite | Procurement, purchase-order receipt and concurrency-safe stock updates |
+| [SupportDesk](https://github.com/shakaleita/supportdesk-saas) | JavaScript · Node.js · Express | Ticket assignment, audit history and first-response analytics |
+| [AgentHub API](https://github.com/shakaleita/agenthub-api) | Python · FastAPI · SQLite | Deterministic rules engine, audit history and nonpersisting rule previews |
+| [Laravel Inventory](https://github.com/shakaleita/laravel-inventory) | PHP · Laravel · SQL | Stock ledger, reconciliation, reorder suggestions and transactional adjustments |
+| [RecruitFlow](https://github.com/shakaleita/recruitflow) | JavaScript · Node.js · Express | Recruitment stages, candidate records and privacy-conscious funnel reporting |
+| [InvoicePilot](https://github.com/shakaleita/invoicepilot) | Python · FastAPI · SQLite | Invoice line items, cent-based totals, due dates and aging reports |
+| [TeamTask](https://github.com/shakaleita/teamtask) | JavaScript · Node.js · Express | Task board, assignees, overdue workload metrics and date validation |
+| [HelpBot Widget](https://github.com/shakaleita/helpbot-widget) | Python · Flask · JavaScript | Embeddable FAQ widget with safely escaped searches and CSV export |
+| [ShopAdmin](https://github.com/shakaleita/shopadmin) | PHP · Laravel · SQL | Catalogue, fulfilment transitions and idempotent order submission |
 
-## Portfolio standards
+## Verification and review
 
-- **Honest scope:** descriptions separate completed MVP features from planned production improvements.
-- **Evidence:** read the tests and API code as well as screenshots or demos when available.
-- **Privacy:** synthetic demonstration data only; never submit real patient or client data.
-- **Security:** owner-only demo authentication is present, but the apps still require threat modelling, deployment hardening and independent security review before use with real data.
-- **Reproducibility:** make setup clear, avoid committing credentials, and check CI results.
+- **Automated checks:** The latest inspected CI runs were successful for all 20 active applications as of **16 November 2026**. The React/FastAPI collection also has CodeQL static analysis and container-build checks. Look at each repo's latest Actions run for current status.
+- **Authentication:** The ten React/FastAPI applications have single-owner login, hashed passwords, revocable sessions, password rotation and forced secure session cookies when `APP_ENV=production`. This is not multi-user RBAC or tenant isolation.
+- **Business logic:** Focus on monetary correctness, booking validity, transactional stock integrity, document history, search safety and controlled networking. Repositories include tests for these implemented behaviours.
+- **Boundaries:** Security scans and passing test suites do not certify full security, live deployment, scalability or compliance. Demonstration data must be synthetic. Independent testing is needed before handling real users or business information.
+- **Reproducibility:** Each repository contains its own README, setup instructions and tech stack. Supported hosting, deployment and configuration vary between apps.
 
-## Next steps toward production quality
+## Other web development
 
-1. Complete a production-focused security review of v0.5 owner authentication; require HTTPS and secure cookies, assess CSRF, and provision secrets safely. Docker and full production deployments remain independent work.
-2. Add deeper role-based authorization and cross-tenant isolation, where applicable.
-3. Introduce database migrations and PostgreSQL where relational complexity requires it.
-4. Extend API, integration, browser, accessibility, and performance tests.
-5. Deploy approved demos using only synthetic data and write honest case studies with measurable outcomes.
+WordPress sites referenced in this portfolio include [drdheidan.com](https://drdheidan.com) and [iqsoh.org](https://iqsoh.org). Any public case study should accurately describe your contribution and only include client materials you are authorised to share. Qarnass can be added when its correct URL is verified.
 
-## Related real-world website work
+## Legacy source kept separate
 
-The portfolio also complements WordPress website work on [drdheidan.com](https://drdheidan.com) and [iqsoh.org](https://iqsoh.org). Project responsibilities, permissions and implementation details should be verified before publishing client case studies.
+[BeautyFort API](https://github.com/shakaleita/Beautyfort-API) is a **separate legacy/reference repository**, *not* counted among the 20 active applications or claimed as original Digital Solution9 development. It contains historical WordPress/SOAP code with upstream authorship notices and a disabled insecure integration. Refer to its [security review](https://github.com/shakaleita/Beautyfort-API/blob/master/SECURITY_REVIEW.md). Formerly exposed credentials require provider-side revocation if real.
 
----
+## CV and portfolio links
 
-**Review these projects for their code, engineering choices, and measured improvements—not for inflated claims of enterprise-readiness.**
+- **[CV-ready project bullets](docs/CV_READY.md)** — copy and edit four or five highlights
+- **[Verified engineering change report](docs/ENGINEERING_RELEASE_2026-11-16.md)** — implementation changes, release checks and limitations
+- **[Digital Solution9 portfolio website source](docs/index.html)** — a curated presentation of ten selected full-stack projects
+- **[GitHub profile](https://github.com/shakaleita)** — all public repositories
 
-
-## Additional public repositories (2026 audit)
-
-The following public repositories extend the initial ten-app collection. They are primarily **local portfolio MVPs** with engineering case studies, not verified production deployments.
-
-| Repository | Domain and engineering focus |
-|---|---|
-| [NexaCRM](https://github.com/shakaleita/nexacrm) | Accounts, contacts, deals and scheduled follow-ups |
-| [BizFlow ERP](https://github.com/shakaleita/bizflow-erp) | Procurement, stock receipts and inventory control |
-| [SupportDesk SaaS](https://github.com/shakaleita/supportdesk-saas) | Support tickets, assignment and internal notes |
-| [AgentHub API](https://github.com/shakaleita/agenthub-api) | Deterministic rules-based automation; **not** generative AI |
-| [Laravel Inventory](https://github.com/shakaleita/laravel-inventory) | SKU, warehouse stock movements and reorder thresholds |
-| [RecruitFlow](https://github.com/shakaleita/recruitflow) | Recruiting pipeline and interview records |
-| [InvoicePilot](https://github.com/shakaleita/invoicepilot) | Invoicing, integer-cent monetary totals and status changes |
-| [TeamTask](https://github.com/shakaleita/teamtask) | Task assignment, priorities and workflow columns |
-| [HelpBot Widget](https://github.com/shakaleita/helpbot-widget) | Flask-backed embeddable FAQ widget |
-| [ShopAdmin](https://github.com/shakaleita/shopadmin) | Laravel commerce catalogue and fulfilment |
-| [Beautyfort API](https://github.com/shakaleita/Beautyfort-API) | **Legacy/reference** SOAP/WordPress source with upstream authorship to preserve; see [provenance notes](https://github.com/shakaleita/Beautyfort-API/blob/master/PORTFOLIO_AUDIT.md) |
-
-The independent [Elementor portfolio page template](https://github.com/shakaleita) can display all 21 public repositories without altering the existing WordPress theme or logo. The downloadable Elementor JSON template is supplied separately in the project conversation.
-
-**Review policy:** Project descriptions are grounded in public source/README files. Legacy code is not attributed as original work without evidence; private repositories are excluded. No 9/10 or enterprise-production rating is inferred from repository count, theme design or CI badges.
-
-
-## November 2026 engineering upgrade
-
-The public projects now include improvements to owner account security, revocable sessions, credentialed frontend API access, domain validation, regression testing and static security analysis. The React/FastAPI collection includes a password-change UI with revocation of existing sessions. GitHub Actions now runs CI checks, and the non-PHP application repositories use CodeQL; PHP applications use additional syntax and dependency audits. These checks are not a substitute for real deployment and security testing.
-
-[Read the latest engineering upgrade report](docs/ENGINEERING_UPGRADE_2026-11.md) for verified changes, outstanding risks and release criteria. Dependency-update PRs are intentionally **review-only**, never automatically merged.
+**Current scope:** 20 active public application repositories + 1 separately labelled legacy repository. All other repositories, including private repositories and Apex Clinic OS, are outside the portfolio and were not modified for this release.
