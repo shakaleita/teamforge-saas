@@ -1,0 +1,19 @@
+name: Container build checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  containers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build API image
+        run: docker build -t portfolio-api-ci ./backend
+      - name: Build frontend image
+        run: docker build -t portfolio-web-ci ./frontend
