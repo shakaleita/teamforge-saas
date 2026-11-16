@@ -1,16 +1,17 @@
-"""TeamForge local portfolio API.
+"""TeamForge local portfolio API with single-owner session authentication.
 
-No authentication is implemented: do not deploy publicly without access controls.
+This demonstration is not a multi-tenant, public-production SaaS service.
 """
 import os
 import sqlite3
 from contextlib import contextmanager
+from datetime import date
 from pathlib import Path
 from typing import Literal
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 APP_TITLE = "TeamForge"
 DB = Path(os.environ.get("APP_DB", str(Path(__file__).parent / "app.db")))
@@ -65,6 +66,17 @@ with db() as con:
     )""")
     con.execute("CREATE INDEX IF NOT EXISTS idx_task_activity_workspace ON task_activity(workspace, id)")
 
+def validate_due_date(value: str | None) -> str | None:
+    """Allow empty due date or a canonical, valid YYYY-MM-DD date."""
+    if value is None or value == '':
+        return value
+    try:
+        if len(value)!=10 or date.fromisoformat(value).isoformat()!=value:
+            raise ValueError('Use YYYY-MM-DD')
+    except ValueError:
+        raise ValueError('Due date must be a valid YYYY-MM-DD calendar date')
+    return value
+
 class Task(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True)
     workspace: str = Field(default="Acme Studio", min_length=1, max_length=100)
@@ -74,6 +86,11 @@ class Task(BaseModel):
     status: Status = "Backlog"
     due_date: str = Field(default="", max_length=30)
 
+    @field_validator('due_date')
+    @classmethod
+    def canonical_due(cls, value: str) -> str:
+        return validate_due_date(value)
+
 class TaskEdit(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True)
     workspace: str | None = Field(default=None, min_length=1, max_length=100)
@@ -82,6 +99,11 @@ class TaskEdit(BaseModel):
     priority: Priority | None = None
     status: Status | None = None
     due_date: str | None = Field(default=None, max_length=30)
+
+    @field_validator('due_date')
+    @classmethod
+    def canonical_due(cls, value: str | None) -> str | None:
+        return validate_due_date(value)
 
 
 def row_or_404(con: sqlite3.Connection, item_id: int):
@@ -140,8 +162,9 @@ def create_item(item: Task):
 def change_status(item_id: int, status: Status):
     """Backward-compatible endpoint used by the original React dashboard."""
     with db() as con:
-        row_or_404(con, item_id)
         current = row_or_404(con, item_id)
+        if current['status'] == status:
+            return current
         con.execute("UPDATE tasks SET status=? WHERE id=?", (status, item_id))
         con.execute("INSERT INTO task_activity(task_id,workspace,action,detail) VALUES(?,?,?,?)", (item_id,current["workspace"],"status_changed",f"{current['status']} → {status}"))
         return row_or_404(con, item_id)
