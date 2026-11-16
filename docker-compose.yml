@@ -1,0 +1,23 @@
+# Local demo only. Both services bind to loopback, not a public interface.
+services:
+  api:
+    build: ./backend
+    environment:
+      APP_DB: /app/data/app.db
+      CORS_ORIGINS: http://localhost:5173,http://localhost:8080
+      OWNER_SETUP_TOKEN: ${OWNER_SETUP_TOKEN:?Set OWNER_SETUP_TOKEN in the local root .env file}
+      COOKIE_SECURE: "0"
+    volumes:
+      - portfolio_data:/app/data
+    ports:
+      - "127.0.0.1:8000:8000"
+    restart: unless-stopped
+  web:
+    build: ./frontend
+    depends_on:
+      - api
+    ports:
+      - "127.0.0.1:8080:80"
+    restart: unless-stopped
+volumes:
+  portfolio_data:
