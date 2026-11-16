@@ -112,3 +112,15 @@ This MVP does **not** implement authentication, authorisation, rate limits, audi
 ## License
 
 MIT. See LICENSE.
+
+---
+
+## Portfolio showcase & quality checks
+
+[![Portfolio quality checks](https://github.com/shakaleita/teamforge-saas/actions/workflows/portfolio-checks.yml/badge.svg)](https://github.com/shakaleita/teamforge-saas/actions/workflows/portfolio-checks.yml)
+
+**Engineering focus:** Task modeling, task activity history, and workspace reporting.
+
+Part of my [10-project full-stack engineering portfolio](https://github.com/shakaleita/teamforge-saas/blob/main/PORTFOLIO.md). Browse the full collection for related domain projects and engineering trade-offs.
+
+**Project status:** Local portfolio MVP. CI exercises backend tests and the frontend build; an automated check does not imply production security or a deployed demo. The newer v0.4 security release is not part of this v0.3 GitHub source until explicitly integrated and reviewed.
