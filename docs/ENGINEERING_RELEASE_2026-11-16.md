@@ -46,3 +46,23 @@ The legacy `Beautyfort-API` repository contains third-party authorship notices a
 ## Portfolio positioning
 
 Use the [Elementor portfolio collection](https://github.com/shakaleita/teamforge-saas/blob/main/PORTFOLIO.md) to find source projects and verified capabilities. Present at most three to five flagship apps prominently on a CV and distinguish verified client work from demos. This release does not modify the user’s WordPress site.
+
+---
+
+## Additional hardening pass — November 16, 2026
+
+The following **source-code changes** have been committed to **public repositories only**. Private repositories remain out of scope and were not inspected or modified.
+
+| Project(s) | Additional implementation | Verification |
+|---|---|---|
+| 10 React/FastAPI portfolio applications | Production-mode HTTPS-only session cookies, isolated password/security tests, up-to-date README security descriptions | Previous app/test/container builds passed; new commit-specific CI must be checked |
+| TeamForge | Canonical valid due dates; no duplicate events on no-op task status changes | New tests committed; current workflow queue to be checked |
+| SupportDesk | Privacy-conscious first-response-time report by priority, with new API integration test | [CI](https://github.com/shakaleita/supportdesk-saas/actions) passed |
+| TeamTask | Canonical task due dates, bounded title/description inputs and negative tests | [CI](https://github.com/shakaleita/teamtask/actions) passed |
+| Laravel Inventory | Bounded stock adjustment, quantity and valuation limits; test ensures invalid changes preserve balances and ledger | [CI](https://github.com/shakaleita/laravel-inventory/actions) passed |
+| ShopAdmin | Retry-safe order placement with a unique idempotency key, database migration, request fingerprint, and total-value limits | Latest full migration/test commit CI queued at last review; an earlier incomplete intermediate commit failed |
+| UptimePilot | Pin outbound probes to already-validated public IPs; keep TLS SNI/certificate validation; no redirect following; network-mocked regression tests | Latest CI queued at last review; not yet certified or externally penetration-tested |
+
+**Security boundaries:** The owner-only applications are not multi-tenant RBAC systems. UptimePilot still needs deployment-level egress restrictions and an independent SSRF review before exposure to the internet. These changes are not proof of 9/10 production quality.
+
+**GitHub Actions:** Inspect the latest commit's run, not an older passing badge. Multi-commit upgrades may have failing intermediate checks before all required migrations/tests are committed.
