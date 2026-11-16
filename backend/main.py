@@ -194,6 +194,24 @@ def activity(workspace: str | None = None, limit: int = _Query(25, ge=1, le=100)
 
 
 # v0.5: authenticated owner session for demo deployment
+# Project health metrics: completion, overdue tasks, and priority distribution.
+@app.get('/api/insights')
+def task_insights(workspace: str | None = None):
+    filters = ' WHERE workspace=?' if workspace is not None else ''
+    args = (workspace,) if workspace is not None else ()
+    with db() as con:
+        totals = con.execute("""SELECT COUNT(*) AS total,
+          SUM(CASE WHEN status='Done' THEN 1 ELSE 0 END) AS completed,
+          SUM(CASE WHEN status!='Done' AND date(due_date)<date('now') THEN 1 ELSE 0 END) AS overdue
+          FROM tasks"""+filters, args).fetchone()
+        priority = con.execute('SELECT priority,COUNT(*) AS tasks FROM tasks'+filters+
+                               ' GROUP BY priority ORDER BY priority',args).fetchall()
+    total = totals['total']
+    return {'workspace':workspace,'total_tasks':total,'completed_tasks':totals['completed'] or 0,
+            'overdue_tasks':totals['overdue'] or 0,
+            'completion_percent':round(100*(totals['completed'] or 0)/total,1) if total else 0,
+            'by_priority':[dict(row) for row in priority]}
+
 from security import install_auth
 install_auth(app,DB)
 
