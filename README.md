@@ -1,3 +1,17 @@
+# TeamForge — Digital Solution9 Engineering Portfolio
+
+## v0.5: Engineering upgrade
+
+**New features:** Task comments and workspace-scoped Kanban board API.
+
+**Security:** owner-only session authentication, password hashing, session revocation and an operator-provided first-account token (`OWNER_SETUP_TOKEN`) now protect the API. Create a unique 24+ character token in your local environment before initial registration. No real user/client data should be entered.
+
+**Run locally:** In `backend/`, install `requirements.txt`, set `OWNER_SETUP_TOKEN` to a random secret (for example, generate one with `python -c "import secrets; print(secrets.token_urlsafe(32))"`), then run `uvicorn main:app --reload`. In `frontend/`, run `npm install` and `npm run dev`. Register the first owner with the same setup token in the login screen. Afterward, additional registration is disabled. Run tests using `cd backend && python -m pytest -q`.
+
+**Scope:** This is a local portfolio MVP, not a deployment-ready, multi-user, audited production service. `COOKIE_SECURE=1` and HTTPS are required for any reviewed internet deployment. Previous notes below describe earlier releases and may not reflect the current authentication behavior.
+
+---
+
 # TeamForge
 
 > Multi-workspace project & task management
