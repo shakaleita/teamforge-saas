@@ -99,3 +99,16 @@ def test_v05_task_comments_and_board(client):
     board=client.get('/api/board',params={'workspace':'Engineering'}).json()
     assert sum(col['count'] for col in board['columns'])==1
     assert client.get('/api/items/999999/comments').status_code==404
+
+# v0.6 shared security regression checks
+def test_authenticated_mutation_audit_and_cross_site_guard(client):
+    assert client.get("/api/auth/audit",params={"limit":201}).status_code==422
+    created = client.post("/api/items",json={"workspace":"Audit QA","title":"Check audit trail"})
+    assert created.status_code==201
+    records = client.get("/api/auth/audit").json()
+    assert any(row["method"]=="POST" and row["path"]=="/api/items"
+               and row["status_code"]==201 for row in records)
+    assert not any("password" in str(row).lower() or "setup_token" in str(row).lower() for row in records)
+    blocked=client.post("/api/items",json={"title":"Blocked request","workspace":"Audit QA"},
+                        headers={"sec-fetch-site":"cross-site"})
+    assert blocked.status_code==403
