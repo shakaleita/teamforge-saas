@@ -48,3 +48,27 @@ The portfolio also complements WordPress website work on [drdheidan.com](https:/
 ---
 
 **Review these projects for their code, engineering choices, and measured improvements—not for inflated claims of enterprise-readiness.**
+
+
+## Additional public repositories (2026 audit)
+
+The following public repositories extend the initial ten-app collection. They are primarily **local portfolio MVPs** with engineering case studies, not verified production deployments.
+
+| Repository | Domain and engineering focus |
+|---|---|
+| [NexaCRM](https://github.com/shakaleita/nexacrm) | Accounts, contacts, deals and scheduled follow-ups |
+| [BizFlow ERP](https://github.com/shakaleita/bizflow-erp) | Procurement, stock receipts and inventory control |
+| [SupportDesk SaaS](https://github.com/shakaleita/supportdesk-saas) | Support tickets, assignment and internal notes |
+| [AgentHub API](https://github.com/shakaleita/agenthub-api) | Deterministic rules-based automation; **not** generative AI |
+| [Laravel Inventory](https://github.com/shakaleita/laravel-inventory) | SKU, warehouse stock movements and reorder thresholds |
+| [RecruitFlow](https://github.com/shakaleita/recruitflow) | Recruiting pipeline and interview records |
+| [InvoicePilot](https://github.com/shakaleita/invoicepilot) | Invoicing, integer-cent monetary totals and status changes |
+| [TeamTask](https://github.com/shakaleita/teamtask) | Task assignment, priorities and workflow columns |
+| [HelpBot Widget](https://github.com/shakaleita/helpbot-widget) | Flask-backed embeddable FAQ widget |
+| [ShopAdmin](https://github.com/shakaleita/shopadmin) | Laravel commerce catalogue and fulfilment |
+| [Beautyfort API](https://github.com/shakaleita/Beautyfort-API) | **Legacy/reference** SOAP/WordPress source with upstream authorship to preserve; see [provenance notes](https://github.com/shakaleita/Beautyfort-API/blob/master/PORTFOLIO_AUDIT.md) |
+| [Apex Clinic OS](https://github.com/shakaleita/apex-clinic-os) | **Empty repository / in development** — not presented as a working product |
+
+The independent [Elementor portfolio page template](https://github.com/shakaleita) can display all 22 public repositories without altering the existing WordPress theme or logo. The downloadable Elementor JSON template is supplied separately in the project conversation.
+
+**Review policy:** Project descriptions are grounded in public source/README files. Legacy code is not attributed as original work without evidence; private repositories are excluded. No 9/10 or enterprise-production rating is inferred from repository count, theme design or CI badges.
