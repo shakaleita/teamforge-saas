@@ -88,3 +88,14 @@ def test_v05_secure_bootstrap(client):
         assert anonymous.get('/api/items').status_code==401
         assert anonymous.post('/api/auth/register',json={'username':'intruder','password':'BadPassword123!','setup_token':'wrong'}).status_code==403
     assert client.get('/api/auth/me').status_code==200
+
+
+def test_v05_task_comments_and_board(client):
+    task=create(client,title='API review',workspace='Engineering').json()
+    ident=task['id']
+    assert client.post(f'/api/items/{ident}/comments',json={'author':'Reviewer','body':'Needs integration coverage'}).status_code==201
+    assert client.post(f'/api/items/{ident}/comments',json={'author':'','body':' '}).status_code==422
+    assert client.get(f'/api/items/{ident}/comments').json()[0]['author']=='Reviewer'
+    board=client.get('/api/board',params={'workspace':'Engineering'}).json()
+    assert sum(col['count'] for col in board['columns'])==1
+    assert client.get('/api/items/999999/comments').status_code==404
