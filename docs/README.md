@@ -1,23 +1,30 @@
-# Publish the portfolio website with GitHub Pages
+# Digital Solution9 — Elite Portfolio Website
 
-The static, responsive portfolio site is at `docs/index.html`. It contains working search and category filters, links to all 10 verified public project repositories, and an honest description of the MVP scope.
+A custom-built, responsive engineering portfolio landing page for **Digital Solution9**, featuring the public software projects of [@shakaleita](https://github.com/shakaleita).
 
-## Enable publishing (one-time, in GitHub's web UI)
+## Design and interaction
 
-1. Open [TeamForge repository settings](https://github.com/shakaleita/teamforge-saas/settings/pages).
-2. Under **Build and deployment**, select **Deploy from a branch** as the source.
-3. Choose **main** and **/docs**, then select **Save**.
-4. Visit the site's published link after GitHub reports successful Pages deployment. The expected URL for a standard public github.com personal repository is `https://shakaleita.github.io/teamforge-saas/`, but use the URL GitHub actually displays.
+- Bold editorial typography, original CSS illustration system, distinctive project motifs, and carefully structured case-study cards
+- Ten real repository links, three featured projects, and a separate section for real website work
+- Category filters, full-text project search, and a keyboard shortcut (`/`) to focus search
+- Accessible project detail dialogs, keyboard navigation, reduced-motion support, mobile layouts, and a light/dark toggle
+- Search metadata, social preview metadata, favicon, semantic headings, and structured website data
+- Static site without tracking or forms; no API keys or credentials needed
+- Honest MVP descriptions: illustrations are original conceptual visuals, **not screenshots of deployed applications**
 
-No terminal, domain purchase, database or hosting service is required for this static landing page.
+**Branding:** Digital Solution9 is the main portfolio/studio name; `@shakaleita` remains the GitHub account identity. No personal name was added because it was not supplied. For a job-search CV, add your own verified name near the top or in an About section when you choose to disclose it.
 
-## What this site does and does not do
+## Publish with GitHub Pages
 
-- It is a navigable portfolio landing page, not a deployment of the 10 full-stack applications.
-- Each application card links to the repository's code.
-- Filtering and search happen fully in the browser; no credentials, API calls or user data are collected.
-- Application deployment, testing and security assessment remain separate work.
+1. Open [repository Pages settings](https://github.com/shakaleita/teamforge-saas/settings/pages).
+2. Select **Deploy from a branch** under Build and deployment.
+3. Choose branch **main**, folder **/docs**, and save.
+4. Wait for GitHub to report a successful deployment, then open the URL shown in settings. The expected URL is `https://shakaleita.github.io/teamforge-saas/`.
 
-## Safe publishing
+The website is stored at `docs/index.html` as a self-contained document (CSS, JavaScript and favicon embedded) so branch deployment does not need a build pipeline. A source version with separate files can be maintained locally.
 
-Only enable GitHub Pages for this public portfolio repository. **Do not change any private repositories.**
+## Important accuracy and privacy notes
+
+This page is a **portfolio site** only; it does not deploy or secure the 10 underlying React/FastAPI applications. The linked repositories currently represent local MVP versions, not certified production SaaS products. Confirm project demos and exact client contribution details before advertising them.
+
+The Qarnass project is displayed without an external URL until the correct domain is verified. No changes were made to any existing private repository.
