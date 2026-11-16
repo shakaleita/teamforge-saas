@@ -196,3 +196,39 @@ def activity(workspace: str | None = None, limit: int = _Query(25, ge=1, le=100)
 # v0.5: authenticated owner session for demo deployment
 from security import install_auth
 install_auth(app,DB)
+
+# v0.5: persistent task discussions and board aggregate model
+with db() as con:
+    con.executescript("""CREATE TABLE IF NOT EXISTS task_comments(
+        id INTEGER PRIMARY KEY,task_id INTEGER NOT NULL,author TEXT NOT NULL,body TEXT NOT NULL,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY(task_id) REFERENCES tasks(id) ON DELETE CASCADE);
+        CREATE INDEX IF NOT EXISTS idx_task_comments_task ON task_comments(task_id,id);""")
+
+class Comment(BaseModel):
+    model_config=ConfigDict(str_strip_whitespace=True)
+    author:str=Field(min_length=1,max_length=80)
+    body:str=Field(min_length=1,max_length=2000)
+
+@app.get('/api/items/{item_id}/comments')
+def task_comments(item_id:int):
+    with db() as con:
+        row_or_404(con,item_id)
+        return [dict(r) for r in con.execute('SELECT * FROM task_comments WHERE task_id=? ORDER BY id',(item_id,))]
+
+@app.post('/api/items/{item_id}/comments',status_code=201)
+def add_task_comment(item_id:int,payload:Comment):
+    with db() as con:
+        task=row_or_404(con,item_id)
+        cur=con.execute('INSERT INTO task_comments(task_id,author,body) VALUES(?,?,?)',(item_id,payload.author,payload.body))
+        con.execute('INSERT INTO task_activity(task_id,workspace,action,detail) VALUES(?,?,?,?)',(item_id,task['workspace'],'commented',payload.author))
+        return dict(con.execute('SELECT * FROM task_comments WHERE id=?',(cur.lastrowid,)).fetchone())
+
+@app.get('/api/board')
+def task_board(workspace:str|None=None):
+    with db() as con:
+        if workspace:
+            records=[dict(x) for x in con.execute('SELECT * FROM tasks WHERE workspace=? ORDER BY id DESC',(workspace,))]
+        else:
+            records=[dict(x) for x in con.execute('SELECT * FROM tasks ORDER BY id DESC')]
+    return {'workspace':workspace,'columns':[{'status':status,'count':sum(x['status']==status for x in records),
+            'tasks':[x for x in records if x['status']==status]} for status in STATUSES]}
