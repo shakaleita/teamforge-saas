@@ -4,7 +4,7 @@
 
 **By [shakaleita](https://github.com/shakaleita)**
 
-These are hands-on **portfolio MVPs**, not production SaaS products. Each project is a distinct problem domain, intended to demonstrate end-to-end implementation, engineering trade-offs, and reproducible tests. The repositories currently contain v0.3 application implementations; a later local v0.4 security upgrade is available separately and has **not** been automatically merged into these repos.
+These are hands-on **portfolio MVPs**, not production SaaS products. Each project is a distinct problem domain, intended to demonstrate end-to-end implementation, engineering trade-offs, and reproducible tests. **The public repositories now include the v0.5 engineering upgrades:** operator-controlled owner setup, protected HTTP APIs, enhanced domain workflows, and CI tests. They remain owner-only local MVPs—not audited production applications.
 
 ## Explore the 10 projects
 
@@ -35,7 +35,7 @@ Every project includes a `frontend/` React application, a `backend/` FastAPI app
 
 ## Next steps toward production quality
 
-1. Merge and review the later local v0.4 security upgrades, including authentication, login, Docker configuration, and expanded tests.
+1. Complete a production-focused security review of v0.5 owner authentication; require HTTPS and secure cookies, assess CSRF, and provision secrets safely. Docker and full production deployments remain independent work.
 2. Add deeper role-based authorization and cross-tenant isolation, where applicable.
 3. Introduce database migrations and PostgreSQL where relational complexity requires it.
 4. Extend API, integration, browser, accessibility, and performance tests.
